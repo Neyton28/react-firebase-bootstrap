@@ -8,17 +8,18 @@ import { useHistory } from "react-router-dom"
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const {register, currentUser} = useAuth()
+  const {register} = useAuth()
   const history = useHistory()
-
-  console.log(currentUser)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await register(email, password)
+
+    const res = await register(email, password)
+    if(!res) return
     setEmail('')
     setPassword('')
     history.push("/")
+
   };
 
   return (

@@ -12,8 +12,13 @@ export const AuthProvider = ({children})=>{
     const [currentUser, setCurrentUser] = useState()
     const [loading, setLoading] = useState(true)
 
-    const register = (email, password)=>{
-        createUserWithEmailAndPassword(auth, email, password)
+    const register = async (email, password)=>{
+        try{
+            await createUserWithEmailAndPassword(auth, email, password)
+            return true
+        } catch (e){
+            return false
+        }
     }
 
     const login = (email, password)=>{
