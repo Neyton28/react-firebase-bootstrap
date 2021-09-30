@@ -14,7 +14,7 @@ const Main = styled.main`
   display: flex;
 `
 
-function App() {    
+function App() {      
   return (
     <Router>
       <div>

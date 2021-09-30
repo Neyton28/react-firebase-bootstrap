@@ -1,8 +1,11 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import {Container, Navbar, Nav} from 'react-bootstrap'
+import { useAuth } from "../contexts/AuthContext";
 
 const Header = () => {
+	const { currentUser } = useAuth()
+  
   return (
 		<header>
 			<Navbar bg="light" expand="lg">
@@ -10,9 +13,18 @@ const Header = () => {
 					<Navbar.Toggle aria-controls="basic-navbar-nav" />
 					<Navbar.Collapse id="basic-navbar-nav">
 						<Nav className="me-auto">
-							<Link className="nav-link" to="/">Головна</Link>
-							<Link className="nav-link" to="/login">Логін</Link>
-							<Link className="nav-link" to="/register">Реєстрація</Link>
+							<NavLink className="nav-link" exact  to="/">Головна</NavLink>
+              {currentUser ? (
+                  <>
+                    <NavLink className="nav-link" to="/dashboard">Профіль</NavLink>
+                  </>
+                ):
+                <>
+                  <NavLink className="nav-link" to="/login">Логін</NavLink>
+                  <NavLink className="nav-link" to="/register">Реєстрація</NavLink>
+                </>            
+              }
+							
 						</Nav>
 					</Navbar.Collapse>
 				</Container>
