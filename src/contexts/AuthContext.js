@@ -3,8 +3,9 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { auth, database } from "../firebase";
-import { ref, set, child, push } from "firebase/database";
+import { auth, database, storage } from "../firebase";
+import { ref, set, child, push, get } from "firebase/database";
+import { ref as storRef, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const AuthContext = React.createContext();
 
@@ -29,13 +30,27 @@ export const AuthProvider = ({ children }) => {
     signInWithEmailAndPassword(auth, email, password);
   };
 
-  const addPost = (title, content) => {
+  const addPost = async (title, content, file) => {
     const newPostKey = push(child(ref(database), 'posts')).key;
-    set(ref(database, "posts/" + newPostKey), {
+
+    const data = {
       title,
       content
-    });
+    }
+
+    if(file){
+      const storageRef = storRef(storage, 'images/' + file.name);
+      const uploadTask = await uploadBytes(storageRef, file);
+      const urlTumbinail = await getDownloadURL(uploadTask.ref)
+      data.img = urlTumbinail
+    }
+    set(ref(database, "posts/" + newPostKey), data);
   };
+
+  const getPosts = async () => {
+    const res = await get(child(ref(database), "posts"))
+    return Object.values(res.val())
+  }
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -49,6 +64,7 @@ export const AuthProvider = ({ children }) => {
     register,
     login,
     addPost,
+    getPosts,
     currentUser,
   };
 
