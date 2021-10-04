@@ -18,7 +18,7 @@ const Home = () => {
   useEffect(async() => {
     await getPosts(updatePosts)
     return destroyedGetPost
-  }, [getPosts, destroyedGetPost]);
+  });
 
   return (
     <Container className="py-5">
