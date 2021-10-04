@@ -4,7 +4,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth, database, storage } from "../firebase";
-import { ref, set, child, push, get } from "firebase/database";
+import { ref, set, child, push, onChildAdded, off } from "firebase/database";
 import { ref as storRef, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const AuthContext = React.createContext();
@@ -16,6 +16,8 @@ export function useAuth() {
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
+
+  const ref_path = ref(database, "posts")
 
   const register = async (email, password) => {
     try {
@@ -39,7 +41,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     if(file){
-      const storageRef = storRef(storage, 'images/' + file.name);
+      const storageRef = storRef(storage, 'images/' + file.name + Date.now());
       const uploadTask = await uploadBytes(storageRef, file);
       const urlTumbinail = await getDownloadURL(uploadTask.ref)
       data.img = urlTumbinail
@@ -47,9 +49,15 @@ export const AuthProvider = ({ children }) => {
     set(ref(database, "posts/" + newPostKey), data);
   };
 
-  const getPosts = async () => {
-    const res = await get(child(ref(database), "posts"))
-    return Object.values(res.val())
+  const getPosts = async (updatePost) => {
+    
+    onChildAdded(ref_path, (data)=>{
+      updatePost(data.val())
+    })
+  }
+
+  const destroyedGetPost = () => {
+    off(ref_path, 'child_added')
   }
 
   useEffect(() => {
@@ -66,6 +74,7 @@ export const AuthProvider = ({ children }) => {
     addPost,
     getPosts,
     currentUser,
+    destroyedGetPost,
   };
 
   return (

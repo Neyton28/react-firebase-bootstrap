@@ -14,17 +14,16 @@ const Header = () => {
 					<Navbar.Collapse id="basic-navbar-nav">
 						<Nav className="me-auto">
 							<NavLink className="nav-link" exact  to="/">Головна</NavLink>
-              {currentUser ? (
-                  <>
-                    <NavLink className="nav-link" to="/dashboard">Профіль</NavLink>
-                  </>
-                ):
-                <>
-                  <NavLink className="nav-link" to="/login">Логін</NavLink>
-                  <NavLink className="nav-link" to="/register">Реєстрація</NavLink>
-                </>            
-              }
-							
+								{currentUser ? (
+									<>
+										<NavLink className="nav-link" to="/add-post">Додати поста</NavLink>
+									</>
+									):
+									<>
+									<NavLink className="nav-link" to="/login">Логін</NavLink>
+									<NavLink className="nav-link" to="/register">Реєстрація</NavLink>
+									</>            
+								}
 						</Nav>
 					</Navbar.Collapse>
 				</Container>

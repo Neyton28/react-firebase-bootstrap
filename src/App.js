@@ -6,7 +6,7 @@ import Register from "./pages/Register"
 import Header from "./components/Header"
 import styled from "styled-components";
 import { AuthProvider } from "./contexts/AuthContext";
-import Dashboard from "./pages/Dashboard"
+import AddPost from "./pages/AddPost"
 import PrivareRoute from "./components/PrivareRoute"
 
 const Main = styled.main`
@@ -22,7 +22,7 @@ function App() {
           <Header />
           <Main>
             <Switch>
-              <PrivareRoute path="/dashboard" component={Dashboard} />
+              <PrivareRoute path="/add-post" component={AddPost} />
               <Route path="/login">
                 <Login />
               </Route>
