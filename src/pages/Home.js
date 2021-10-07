@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -10,15 +10,20 @@ const Home = () => {
   const { getPosts, destroyedGetPost } = useAuth();
   const [posts, setPosts] = useState([]);
 
-  const updatePosts = (post) => {
+  // const updatePosts = (post) => {
+  //   posts.push(post)
+  //   setPosts(posts.slice().reverse())
+  // }
+
+  const updatePosts = useCallback((post)=>{
     posts.push(post)
     setPosts(posts.slice().reverse())
-  }
+  }, [setPosts, posts])
 
-  useEffect(async() => {
-    await getPosts(updatePosts)
-    return destroyedGetPost
-  });
+  useEffect(() => {
+    getPosts(updatePosts)
+    return ()=>{destroyedGetPost()}
+  }, [getPosts, destroyedGetPost, updatePosts]);
 
   return (
     <Container className="py-5">
