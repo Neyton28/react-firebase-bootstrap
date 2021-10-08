@@ -53,6 +53,7 @@ export const AuthProvider = ({ children }) => {
     
     onChildAdded(ref_path, (data)=>{
       updatePost(data.val())
+      console.log('asd')
     })
   }
 
