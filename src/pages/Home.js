@@ -30,7 +30,7 @@ const Home = () => {
       <Row>
         {posts.map((post, idx) => (
           <Col key={idx} md={6} lg={4}>
-            <PostBox post={post} onRemove={removePostHandler} />
+            <PostBox post={post} onRemove={ ()=>{removePostHandler(post.key)}} />
           </Col>
         ))}
       </Row>
