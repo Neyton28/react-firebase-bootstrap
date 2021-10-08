@@ -4,7 +4,7 @@ import {Container, Navbar, Nav} from 'react-bootstrap'
 import { useAuth } from "../contexts/AuthContext";
 
 const Header = () => {
-	const { currentUser } = useAuth()
+	const { currentUser, signOutUser } = useAuth()
   
   return (
 		<header>
@@ -12,11 +12,12 @@ const Header = () => {
 				<Container>
 					<Navbar.Toggle aria-controls="basic-navbar-nav" />
 					<Navbar.Collapse id="basic-navbar-nav">
-						<Nav className="me-auto">
+						<Nav>
 							<NavLink className="nav-link" exact  to="/">Головна</NavLink>
 								{currentUser ? (
 									<>
 										<NavLink className="nav-link" to="/add-post">Додати поста</NavLink>
+										<Nav.Link to="/" onClick={signOutUser} >Вийти</Nav.Link>
 									</>
 									):
 									<>
