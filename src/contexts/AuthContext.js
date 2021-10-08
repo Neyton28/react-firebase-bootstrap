@@ -29,8 +29,15 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = (email, password) => {
-    signInWithEmailAndPassword(auth, email, password);
+  const login = async(email, password) => {
+    try{
+      await signInWithEmailAndPassword(auth, email, password);
+      console.log('login')
+      return true
+    }catch(e){
+      console.log(e.code)
+      return false
+    }
   };
 
   const removePost = (uId) => {
