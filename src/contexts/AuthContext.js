@@ -4,7 +4,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth, database, storage } from "../firebase";
-import { ref, set, child, push, onChildAdded, off } from "firebase/database";
+import { ref, set, child, push, onChildAdded, off, remove } from "firebase/database";
 import { ref as storRef, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const AuthContext = React.createContext();
@@ -32,6 +32,10 @@ export const AuthProvider = ({ children }) => {
     signInWithEmailAndPassword(auth, email, password);
   };
 
+  const removePost = (uId) => {
+    remove(ref(database, "posts/" + uId))
+  }
+
   const addPost = async (title, content, file) => {
     const newPostKey = push(child(ref(database), 'posts')).key;
 
@@ -52,8 +56,11 @@ export const AuthProvider = ({ children }) => {
   const getPosts = async (updatePost) => {
     
     onChildAdded(ref_path, (data)=>{
-      updatePost(data.val())
-      console.log('asd')
+      const post = {
+        key: data.key,
+        ...data.val()
+      }
+      updatePost(post)
     })
   }
 
@@ -76,6 +83,7 @@ export const AuthProvider = ({ children }) => {
     getPosts,
     currentUser,
     destroyedGetPost,
+    removePost,
   };
 
   return (

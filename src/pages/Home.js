@@ -7,7 +7,7 @@ import { useAuth } from "../contexts/AuthContext";
 import PostBox from "../components/PostBox"
 
 const Home = () => {
-  const { getPosts, destroyedGetPost } = useAuth();
+  const { getPosts, destroyedGetPost, removePost } = useAuth();
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -20,12 +20,17 @@ const Home = () => {
     return ()=>{destroyedGetPost()}
   },[destroyedGetPost, getPosts]);
 
+  const removePostHandler = (key)=>{
+    removePost(key)
+    setPosts( posts.filter(post=> post.key !== key ) )
+  }
+
   return (
     <Container className="py-5">
       <Row>
         {posts.map((post, idx) => (
           <Col key={idx} md={6} lg={4}>
-            <PostBox post={post} />
+            <PostBox post={post} onRemove={removePostHandler} />
           </Col>
         ))}
       </Row>
