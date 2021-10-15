@@ -49,7 +49,8 @@ export const AuthProvider = ({ children }) => {
 
     const data = {
       title,
-      content
+      content,
+      user_id: currentUser.uid
     }
 
     if(file){
